@@ -1,0 +1,67 @@
+Labsheet No.1
+=============
+This is a sample document for testing e-Labsheet project.
+
+@@Config lang='python',markers=('{{','}}')
+
+Example
+=======
+<pre class="output">
+Enter a number: _20_
+</pre>
+
+The first code segment:
+@@BeginCode hidden=False,lineno=True
+def hello():
+   print 'Hello, World'
+@@EndCode
+
+The second code segment:
+@@BeginCode lineno=True,highlight=True
+x = {{raw_input}}('What is your name?')
+print {{'Hello, %s'}} % {{x}}
+sum,prod = 0,1
+for x in range(100):
+   {{sum = sum + x}}
+   {{prod = prod*x}}
+   {{             }}
+{{                          }}
+{{                          }}
+{{                          }}
+{{                         }}
+{{                          }}
+{{                          }}
+{{                          }}
+@@EndCode
+
+@@BeginTest visible=True
+Arthur
+@@EndTest
+
+@@BeginTest visible=True
+Hello, World
+Hi
+@@EndTest
+
+@@BeginTest
+1
+2
+3
+4
+@@EndTest
+
+Additional Questions
+====================
+Fill in the blanks
+
+
+
+
+* The programming language is called {{[10]Python}}.  It is considered a
+{{[20]dynamically}}-typed {{language}}.
+
+The third code segment:
+@@BeginCode blank=True,highlight=True
+x = input('Enter x: ')
+print(x)
+@@EndCode

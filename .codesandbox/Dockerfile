@@ -38,4 +38,4 @@ RUN set -xe && \
 ENV BOX_ROOT /var/local/lib/isolate
 
 # Install python
-RUN apt update && apt install -y python3 python3-pip
+RUN apt update && apt install -y python3 python3-pip python3-venv
