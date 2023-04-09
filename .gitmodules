@@ -1,3 +1,15 @@
-[submodule "compilers"]
-	path = compilers
+[submodule "ex/compilers"]
+	path = ex/compilers
 	url = https://github.com/judge0/compilers.git
+[submodule "ex/judge0"]
+	path = ex/judge0
+	url = https://github.com/judge0/judge0.git
+[submodule "ex/codecheck2"]
+	path = ex/codecheck2
+	url = https://github.com/cayhorstmann/codecheck2.git
+[submodule "ex/JBLab"]
+	path = ex/JBLab
+	url = https://github.com/wedevit/JBLab.git
+[submodule "ex/bella"]
+	path = ex/bella
+	url = https://github.com/wedevit/bella.git
