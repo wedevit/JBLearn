@@ -25,5 +25,16 @@ RUN apt update -y && apt install -y curl && \
   curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
   apt update -y && apt install -y nodejs
 
+# Install isolate
+RUN set -xe && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends git build-essential libcap-dev && \
+    rm -rf /var/lib/apt/lists/* && \
+    git clone https://github.com/judge0/isolate.git /tmp/isolate && \
+    cd /tmp/isolate && \
+    git checkout ad39cc4d0fbb577fb545910095c9da5ef8fc9a1a && \
+    make -j$(nproc) install && \
+    rm -rf /tmp/*
+ENV BOX_ROOT /var/local/lib/isolate
 
 RUN apt update && apt install -y python3 python3-pip

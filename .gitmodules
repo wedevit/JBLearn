@@ -1,0 +1,3 @@
+[submodule "compilers"]
+	path = compilers
+	url = https://github.com/judge0/compilers.git
