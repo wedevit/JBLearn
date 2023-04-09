@@ -1,6 +1,3 @@
-[submodule "ex/compilers"]
-	path = ex/compilers
-	url = https://github.com/judge0/compilers.git
 [submodule "ex/judge0"]
 	path = ex/judge0
 	url = https://github.com/judge0/judge0.git
