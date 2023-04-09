@@ -10,3 +10,6 @@
 [submodule "ex/bella"]
 	path = ex/bella
 	url = https://github.com/wedevit/bella.git
+[submodule "ex/compilers"]
+	path = ex/compilers
+	url = https://github.com/judge0/compilers.git
