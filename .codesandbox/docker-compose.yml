@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  server:
+    image: judge0/compilers:latest-slim
+    privileged: true
+    restart: always

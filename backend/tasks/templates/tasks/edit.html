@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+</head>
+<body>
+    <h1>{{ task.name }}</h1>
+    <form action="{% url 'edit-task' task.id %}" method="POST">
+        {% csrf_token %}
+        <textarea name="source" rows=30 cols="80">{{ task.source }}</textarea>
+        <br />
+        <button type="submit">Save</button>
+    </form>
+    <div>
+        {{ task.html_template | safe}}
+    </div>
+</body>
+</html>
