@@ -13,3 +13,9 @@
 [submodule "ex/compilers"]
 	path = ex/compilers
 	url = https://github.com/judge0/compilers.git
+[submodule "ex/PrairieLearn"]
+	path = ex/PrairieLearn
+	url = https://github.com/PrairieLearn/PrairieLearn.git
+[submodule "ex/elabsheet"]
+	path = ex/elabsheet
+	url = https://gitlab.com/cjaikaeo/elabsheet.git
