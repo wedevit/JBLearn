@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'parser',
     'tasks',
+    'submissions'
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+}
+
+try:
+    from submissions.settings import *
+except ImportError:
+    pass
