@@ -1,7 +1,11 @@
 version: "3"
-
+    
 services:
   server:
     image: judge0/compilers:latest-slim
+    container_name: isolate
+    stdin_open: true 
+    tty: true
     privileged: true
     restart: always
+    entrypoint: "/bin/bash"

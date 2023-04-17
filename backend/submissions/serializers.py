@@ -23,7 +23,7 @@ class CreateSubmissionSerializer(serializers.ModelSerializer):
             'stderr',
             'compile_output',
             'message',
-        ] + ['started_at', 'queued_at', 'updated_at', 'queue_host', 'execution_host']
+        ]
         fields = [
             'source_code',
             'language',
@@ -88,8 +88,8 @@ class RetrieveSubmissionSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         fields = self.context['request'].query_params.get('fields')
         if fields is None:
+            return
             fields = 'token,stdout,time,memory,stderr,compile_output,message,status'
-
         fields = fields.split(',')
         # Drop any fields that are not specified in the `fields` argument.
         allowed = set(fields)

@@ -100,53 +100,14 @@ class Command(BaseCommand):
                 delete_stop_file(my_pid)
                 break
 
-            submission = Submission.fetch_one_inqueue_submission()
+            submission = Submission.fetch_one_inqueue_submission(False)
 
             if submission != None:
                 self.log("Grading submission {}".format(submission), style=self.style.WARNING)
                 submission.run()
-                
-                # self.log("Grading (submission:{} task:{} user:{} section:{})"
-                #          " submitted at {}".format(
-                #              submission.token,
-                #              submission.assignment.task_id,
-                #              submission.user,
-                #              submission.section_id,
-                #              timezone.localtime(submission.submitted_at).strftime(
-                #                  "%Y-%m-%d %H:%M:%S"),
-                #          ), style=self.style.WARNING)
-                # submission.make_task_concrete()
-                # task = submission.assignment.task
-                # if settings.GRADER_OUTPUT_LOG:
-                #     output_buffer = []
-                # else:
-                #     output_buffer = None
-                start_time = timezone.now()
-
-                # os.putenv("SUBMITTER", submission.user.username)
-
-                # # XXX get into codeSeg.sequence to get the list of blanks
-
-                # grading_results, messages = task.verify_with_messages(
-                #     submission.answer, output_buffer)
-                # manual_grading_results = task.verify_manual_auto_gradable_fields(
-                #     submission.answer)
-                # save_grading_result(submission,
-                #                     grading_results,
-                #                     manual_grading_results,
-                #                     messages,
-                #                     start_time)
-
-                # self.log("result [{}]".format(
-                #     "".join(str(r) for r in submission.results),
-                # ), style=self.style.SUCCESS)
-
-                # if settings.GRADER_OUTPUT_LOG:
-                #     log_output(output_log_file, submission,
-                #                messages, output_buffer)
             else:
                 time.sleep(SLEEP_INTERVAL)
-            break
+                break
 
         self.log_file.close()
         if settings.GRADER_OUTPUT_LOG:

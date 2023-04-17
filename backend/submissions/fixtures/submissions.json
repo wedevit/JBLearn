@@ -1,0 +1,126 @@
+[
+    {
+        "model": "submissions.submission",
+        "pk": 1,
+        "fields": {
+            "source_code": "print(3 * 5)",
+            "language": 71,
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 2,
+        "fields": {
+            "source_code": "print('Hello', input())",
+            "language": 71,
+            "stdin": "Lindsay",
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 3,
+        "fields": {
+            "source_code": "#include<stdio.h>\r\nint main() {\r\n  printf(\"Hello, World\\n\");\r\n  return 0;\r\n}",
+            "language": 49,
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 4,
+        "fields": {
+            "source_code": "#include <stdio.h>\r\nint main() {\r\n    printf(\"Hello World\");\r\n    return 0;\r\n}",
+            "language": 49,
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 5,
+        "fields": {
+            "source_code": "#include <stdio.h>\r\nint main() {\r\n    printf(\"Hello World\");\r\n    return 0;\r\n}",
+            "language": 49,
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 6,
+        "fields": {
+            "source_code": "#include <stdio.h>\r\nint main() {\r\n    printf(\"Hello World\");\r\n    return 0;\r\n}",
+            "language": 49,
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 7,
+        "fields": {
+            "source_code": "#include <stdio.h>\r\nint main() {\r\n    printf(\"Hello World\");\r\n    return 0;\r\n}",
+            "language": 49,
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 8,
+        "fields": {
+            "source_code": "#include <stdio.h>\r\nint main() {\r\n    char name[20];\r\n    printf(\"Enter name: \");\r\n    scanf(\"%s\", name);    printf(\"Hello %s\", name);\r\n    return 0;\r\n}",
+            "language": 49,
+            "stdin": "Bella",
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 9,
+        "fields": {
+            "source_code": "\n#include <stdio.h>\nint main() {\n    printf(\"Hello World\");\n    return 0;\n}\n        ",
+            "language": 49,
+            "expected_output": "Hello, World",
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 10,
+        "fields": {
+            "source_code": "print(3 * 5",
+            "language": 71,
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    },
+    {
+        "model": "submissions.submission",
+        "pk": 11,
+        "fields": {
+            "source_code": "while True: print(3 * 5)",
+            "language": 71,
+            "created_at": "2023-04-17T16:58:29.008000+07:00",
+            "queued_at": "2023-04-17T16:58:29.008000+07:00",
+            "updated_at": "2023-04-17T16:58:29.008000+07:00"
+        }
+    }
+]
