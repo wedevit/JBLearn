@@ -202,15 +202,15 @@ class Submission(models.Model):
     #   cleanup
     #   break if submission.status != Status.ac
 
-    @staticmethod
-    def cgroups_allowed():
+    def check_isolate(self):
         p = run_shell_command("isolate --cg --init", check=False)
         run_shell_command("isolate --cleanup", check=False)
-        return p.returncode == 0
+        self.isolate_run = p.returncode == 0
 
     def initialize_workdir(self):
         # JUST HACKING: TO BE REMOVED
-        if settings.DEBUG and not Submission.cgroups_allowed():
+        self.check_isolate()
+        if settings.DEBUG and not self.isolate_run:
             self.enable_per_process_and_thread_time_limit = True
             self.enable_per_process_and_thread_memory_limit = True
         # REMOVE UNTIL HERE
@@ -262,9 +262,11 @@ class Submission(models.Model):
         return run_shell_command(f'isolate {self.cgroups} --box-id={self.box_id} --init').stdout.strip()
 
     def initialize_file(self, file):
-        # run_shell_command(f'touch {file} && chown $(whoami): {file}')
-        run_shell_command(
-            f'echo $MY_SUDO_PASS | sudo touch {file} && sudo chown $(whoami): {file}')
+        command = f'echo $MY_SUDO_PASS | sudo touch {file} && sudo chown $(whoami): {file}'
+        if settings.DEBUG and not self.isolate_run:
+            command = f'touch {file}'
+            
+        run_shell_command(command)
 
     def extract_archive(self):
         pass
@@ -433,6 +435,9 @@ exitcode:0"""
             re.match("^execve\(.+\): Permission denied$", self.message)
         ):
             self.status = Status.EXEC_FORMAT_ERROR
+            
+        if settings.DEBUG and not self.isolate_run and self.stderr:
+            self.status = Status.RUNTIME_ERROR_NZEC
 
     def determine_status(self, status, exit_signal):
         if status == "TO":
