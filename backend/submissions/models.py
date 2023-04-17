@@ -14,7 +14,7 @@ import re
 def echo_file(content, filename):
     if settings.DEBUG:
         print("echo $'" + content.strip().replace('\n',
-          '\\n').replace("'", "\\'") + "'", '>', filename)
+                                                  '\\n').replace("'", "\\'") + "'", '>', filename)
 
 
 def get_hostname():
@@ -26,7 +26,7 @@ def get_hostname():
 
 def run_shell_command(command, timeout=None, input=None, shell=True, capture_output=True, text=True, check=True):
     if settings.DEBUG:
-        print('Running:', command)  
+        print('Running:', command)
     return subprocess.run(command, timeout=timeout, input=input, shell=shell, capture_output=capture_output, text=text, check=check)
 
 
@@ -152,7 +152,7 @@ class Submission(models.Model):
 
     class CompilationError(Exception):
         pass
-    
+
     class TimeoutError(Exception):
         pass
 
@@ -162,7 +162,7 @@ class Submission(models.Model):
             self.started_at = timezone.now()
             self.execution_host = get_hostname()
             self.save()
-            
+
             self.initialize_workdir()
             self.compile()
             self.execute()
@@ -183,8 +183,9 @@ class Submission(models.Model):
             self.save()
             self.cleanup()
             if settings.DEBUG:
-                print("Submission %s finished with status: %s" % (self, self.status))
-                
+                print("Submission %s finished with status: %s" %
+                      (self, self.status))
+
         # if self.compile() == Status.COMPILATION_ERROR:
         #     self.cleanup()
         #     return
@@ -206,7 +207,7 @@ class Submission(models.Model):
         p = run_shell_command("isolate --cg --init", check=False)
         run_shell_command("isolate --cleanup", check=False)
         return p.returncode == 0
-        
+
     def initialize_workdir(self):
         # JUST HACKING: TO BE REMOVED
         if settings.DEBUG and not Submission.cgroups_allowed():
@@ -227,11 +228,13 @@ class Submission(models.Model):
         self.additional_files_archive_file = self.boxdir + \
             "/" + ADDITIONAL_FILES_ARCHIVE_FILE_NAME
 
+        self.initialize_file(self.metadata_file)
+
         # for f in [self.source_file, self.stdin_file, self.stdout_file, self.stderr_file, self.metadata_file]:
         #     self.initialize_file(f)
-            
+
         # print('touch ' + ' '.join([self.stdout_file, self.stderr_file, self.metadata_file]))
-        
+
         # JUST HACKING: TO BE REMOVED
 #         self.source_code = """
 # #include <stdio.h>
@@ -247,12 +250,12 @@ class Submission(models.Model):
 
         if settings.DEBUG:
             echo_file(self.source_code, self.source_file)
-        
+
         # with open(self.stdin_file, 'w') as f:
         #     f.write(self.stdin)
 
         # echo_file(self.stdin, self.stdin_file)
-        
+
         self.extract_archive()
 
     def initialize_box(self):
@@ -260,7 +263,8 @@ class Submission(models.Model):
 
     def initialize_file(self, file):
         # run_shell_command(f'touch {file} && chown $(whoami): {file}')
-        run_shell_command(f'touch {file}')
+        run_shell_command(
+            f'echo $MY_SUDO_PASS | sudo touch {file} && sudo chown $(whoami): {file}')
 
     def extract_archive(self):
         pass
@@ -268,13 +272,15 @@ class Submission(models.Model):
     def compile(self):
         if not self.language.compile_cmd:
             return
-        
+
         compile_script = self.boxdir + "/" + "compile.sh"
-        compiler_options = re.sub("[$&;<>|`]", "", self.compiler_options) if self.compiler_options else ""
-        compile_command = (self.language.compile_cmd % compiler_options).strip()
+        compiler_options = re.sub(
+            "[$&;<>|`]", "", self.compiler_options) if self.compiler_options else ""
+        compile_command = (self.language.compile_cmd %
+                           compiler_options).strip()
         with open(compile_script, "w") as f:
             f.write(compile_command)
-        
+
         if settings.DEBUG:
             echo_file(compile_command, compile_script)
 
@@ -299,13 +305,12 @@ class Submission(models.Model):
             -- /bin/bash $(basename {compile_script})
         '''.strip()
         command = re.sub("\s+", " ", command.replace("\\", ""))
-        
+
         if settings.DEBUG:
             print(f"{Submission.now()} Compiling submission {self}):")
-    
+
         p = run_shell_command(command, check=False)
-        
-    
+
         # JUST HACKING: TO BE REMOVED
         if settings.DEBUG and self.get_metadata().get('status', None) == 'XX':
             command = f"cd {self.boxdir} && /bin/bash $(basename {compile_script})"
@@ -319,11 +324,13 @@ exitcode:0"""
                 f.write(meta_success)
 
             try:
-                p = run_shell_command(command, check=False, timeout=settings.MAX_CPU_TIME_LIMIT+settings.MAX_CPU_EXTRA_TIME)
+                p = run_shell_command(
+                    command, check=False, timeout=settings.MAX_CPU_TIME_LIMIT+settings.MAX_CPU_EXTRA_TIME)
             except subprocess.TimeoutExpired as e:
-                raise Submission.CompilationError("Compilation time limit exceeded.")
+                raise Submission.CompilationError(
+                    "Compilation time limit exceeded.")
         # REMOVE UNTIL HERE
-        
+
         metadata = self.get_metadata()
 
         # Compilation successful
@@ -332,23 +339,25 @@ exitcode:0"""
 
         # Compilation time limit exceeded
         if metadata.get('status', None) == 'TO':
-            raise Submission.CompilationError("Compilation time limit exceeded.")
+            raise Submission.CompilationError(
+                "Compilation time limit exceeded.")
 
         if p.stderr:
             raise Submission.CompilationError(p.stderr)
-        
+
         raise Submission.CompilationError()
 
     def execute(self):
         run_script = self.boxdir + "/" + "run.sh"
-        command_line_arguments = re.sub("[$&;<>|`]", "", self.command_line_arguments) if self.command_line_arguments else ""
+        command_line_arguments = re.sub(
+            "[$&;<>|`]", "", self.command_line_arguments) if self.command_line_arguments else ""
         run_command = f"{self.language.run_cmd} {command_line_arguments}".strip()
         with open(run_script, "w") as f:
             f.write(run_command)
-        
+
         if settings.DEBUG:
             echo_file(run_command, run_script)
-        
+
         command = f'''isolate {self.cgroups} \\
             --silent \\
             --box-id {self.box_id} \\
@@ -372,13 +381,12 @@ exitcode:0"""
         '''.strip()
 
         command = re.sub("\s+", " ", command.replace("\\", ""))
-        
+
         if settings.DEBUG:
             print(f"{Submission.now()} Executing submission {self}):")
-        
-        p = run_shell_command(command, check=False)
-        
-    
+
+        p = run_shell_command(command, input=self.stdin, check=False)
+
         # JUST HACKING: TO BE REMOVED
         if settings.DEBUG and self.get_metadata().get('status', None) == 'XX':
             command = f"cd {self.boxdir} && /bin/bash $(basename {run_script})"
@@ -393,10 +401,11 @@ exitcode:0"""
             # REMOVE UNTIL HERE
 
         try:
-            p = run_shell_command(command, input=self.stdin, check=False, timeout=float(self.cpu_time_limit)+float(self.cpu_extra_time))
+            p = run_shell_command(command, input=self.stdin, check=False, timeout=float(
+                self.cpu_time_limit)+float(self.cpu_extra_time))
         except subprocess.TimeoutExpired as e:
             raise Submission.TimeoutError()
-        
+
         metadata = self.get_metadata()
 
         self.time = metadata['time']
@@ -415,8 +424,9 @@ exitcode:0"""
         except:
             self.exit_signal = 0
         self.message = metadata.get('message', None)
-        self.status = self.determine_status(metadata.get('status', None), self.exit_signal)
-        
+        self.status = self.determine_status(
+            metadata.get('status', None), self.exit_signal)
+
         if self.status == Status.INTERNAL_ERROR and (
             re.match("^execve\(.+\): Exec format error$", self.message) or
             re.match("^execve\(.+\): No such file or directory$", self.message) or
@@ -436,10 +446,11 @@ exitcode:0"""
         elif not self.expected_output or (self.expected_output.strip() == self.stdout.strip()):
             return Status.ACCEPTED
         else:
-          return Status.WRONG_ANSWER
-    
+            return Status.WRONG_ANSWER
+
     def cleanup(self):
-        run_shell_command(f'isolate {self.cgroups} --box-id={self.box_id} --cleanup')
+        run_shell_command(
+            f'isolate {self.cgroups} --box-id={self.box_id} --cleanup')
 
     def get_metadata(self):
         metadata = {}
@@ -477,13 +488,14 @@ exitcode:0"""
             result = cursor.fetchall()
             if len(result) == 1:
                 submission_id = result[0][0]
-                cursor.execute("UPDATE submissions_submission SET status='%s' WHERE id='%s';" % (Status.PROCESSING.name, submission_id))
+                cursor.execute("UPDATE submissions_submission SET status='%s' WHERE id='%s';" % (
+                    Status.PROCESSING.name, submission_id))
             else:
                 submission_id = None
-                
+
             if use_transaction:
                 cursor.execute("COMMIT;")
-            
+
             if submission_id != None:
                 return Submission.objects.get(pk=submission_id)
             else:
